@@ -1,6 +1,6 @@
 # Ayudantía 16/04/2020
 # Imanol NM
-# 
+#
 # Descargar datos de:
 # https://www.gob.mx/salud/documentos/datos-abiertos-152127
 # Datos covid: http://187.191.75.115/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip
@@ -26,9 +26,9 @@ download.file(
 # Desscomprimir los datos y gaurdarlos en el segundo archivo temporar
 unzip(zipfile = tempo, exdir = tempo2)
 # Ver los archivos que se encuentras dentro del zip que descargamos
-list.files(path = file.path(tempo2)) 
+list.files(path = file.path(tempo2))
 # Con base en lo anterior, modificar "200416COVID19MEXICO.csv"
-datos_cov <- read.csv(file = file.path(tempo2, "200416COVID19MEXICO.csv"), 
+datos_cov <- read.csv(file = file.path(tempo2, list.files(path = file.path(tempo2))[1]) ), 
                       stringsAsFactors = FALSE)
 # Ver los datos
 View(datos_cov)
@@ -42,7 +42,7 @@ rm(tempo2)
 tempo <- tempfile()
 tempo2 <- tempfile()
 download.file(
-    url = "http://187.191.75.115/gobmx/salud/datos_abiertos/diccionario_datos_covid19.zip", 
+    url = "http://187.191.75.115/gobmx/salud/datos_abiertos/diccionario_datos_covid19.zip",
     destfile = tempo
 )
 unzip(zipfile = tempo, exdir = tempo2)
@@ -72,7 +72,7 @@ datos_cov <- datos_cov %>%
 
 # Gráfica de casos diarios a nivel nacional
 datos_cov %>%
-    filter(RESULTADO == 1) %>% 
+    filter(RESULTADO == 1) %>%
     group_by(FECHA_INGRESO) %>%
     tally() %>%
     ggplot(aes(x = FECHA_INGRESO, y = n)) +
@@ -83,7 +83,7 @@ datos_cov %>%
 
 # Gráfica de casos acumulados a nivel nacional
 datos_cov %>%
-    filter(RESULTADO == 1) %>% 
+    filter(RESULTADO == 1) %>%
     group_by(FECHA_INGRESO) %>%
     tally() %>%
     ggplot(aes(x = FECHA_INGRESO)) +
@@ -121,7 +121,7 @@ datos_cov %>%
 datos_cov %>%
     filter(RESULTADO == 1) %>%
     group_by(FECHA_INGRESO, ENTIDAD_UM) %>%
-    tally() %>% 
+    tally() %>%
     group_by(ENTIDAD_UM) %>%
     mutate(Casos_ac = cumsum(n)) %>%
     ggplot(aes(x = FECHA_INGRESO, y = Casos_ac, col = ENTIDAD_UM)) +
@@ -138,10 +138,10 @@ datos_cov %>%
 datos_conf <- datos_cov %>%
     filter(RESULTADO == 1) %>%
     group_by(FECHA_INGRESO, ENTIDAD_UM) %>%
-    tally() %>% 
+    tally() %>%
     group_by(ENTIDAD_UM) %>%
     mutate(Casos_ac = cumsum(n))
-    
+
 # Obtener las entidades que ya rebasaron 200 casos en total
 rebasar200 <-  datos_conf %>%
     summarise(Casos_totales = max(Casos_ac)) %>%
