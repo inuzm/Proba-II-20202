@@ -23,17 +23,12 @@ do cd $f1;
 {
 for f2 in *;
 do cd $f2;
+echo "creando $f1$f2.gif"
 convert -delay 33 *.png "../$f1$f2.gif";
 echo "$f1$f2.gif creado";
 cd ..;
+rm -r $f2;
 done
 };
 cd ..;
-done
-
-for f1 in *;
-do cd $f1;
-find . -iname "*.png" -delete;
-find . -type d -mindepth 1 -empty -delete;
-cd ..; 
 done

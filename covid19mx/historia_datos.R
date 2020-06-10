@@ -52,14 +52,14 @@ for(j in 1:length(claves$ABREVIATURA)){
         cat(sprintf("\nEstado: %s\n", claves$ENTIDAD_FEDERATIVA[j]))
         pb <- txtProgressBar(max = length(fechas), style = 3)
         for(i in 1:length(fechas)){
-            png(paste0("gifs/diario/", claves$ABREVIATURA[j], sprintf("/%06d.png", k)), width = 1200, height = 900, res = 150)
+            png(paste0("gifs/diario/", claves$ABREVIATURA[j], sprintf("/%06d.png", k)), width = 600, height = 450, res = 100)
             p1 <- datos_loop %>%
                 filter(FECHA_ACTUALIZACION == fechas[i]) %>%
                 ggplot(aes(x = FECHA_INGRESO, y = n)) +
                 geom_col(width = 1, fill = "darkorchid", col = NA) +
                 theme_minimal() +
-                scale_x_date(labels = scales::date_format("%d-%m"), limits = range(casos_acum$FECHA_INGRESO), breaks = breaks_pretty(n = 5))  +
-                scale_y_continuous(breaks= pretty_breaks()) +
+                scale_x_date(labels = scales::date_format("%d-%m"), limits = range(datos_loop$FECHA_INGRESO), breaks = breaks_pretty(n = 5))  +
+                scale_y_continuous(breaks= pretty_breaks(), limits = c(0, max(datos_loop$n))) +
                 theme(
                     text=element_text(family="Times New Roman"),
                     legend.position = "bottom"
@@ -71,14 +71,14 @@ for(j in 1:length(claves$ABREVIATURA)){
                 )
             plot(p1)
             dev.off()
-            png(paste0("gifs/acum/", claves$ABREVIATURA[j], sprintf("/%06d.png", k)), width = 1200, height = 900, res = 150)
+            png(paste0("gifs/acum/", claves$ABREVIATURA[j], sprintf("/%06d.png", k)), width = 600, height = 450, res = 150)
             p2 <- datos_loop %>%
                 filter(FECHA_ACTUALIZACION == fechas[i]) %>%
                 ggplot(aes(x = FECHA_INGRESO, y = acum)) +
                 geom_line(col = "darkorchid") +
                 theme_minimal() +
-                scale_x_date(labels = scales::date_format("%d-%m"), limits = range(casos_acum$FECHA_INGRESO), breaks = breaks_pretty(n = 5)) +
-                scale_y_continuous(breaks= pretty_breaks()) +
+                scale_x_date(labels = scales::date_format("%d-%m"), limits = range(datos_loop$FECHA_INGRESO), breaks = breaks_pretty(n = 5)) +
+                scale_y_continuous(breaks= pretty_breaks(), limits = c(0, max(datos_loop$acum))) +
                 theme(
                     text=element_text(family="Times New Roman"),
                     legend.position = "bottom"
