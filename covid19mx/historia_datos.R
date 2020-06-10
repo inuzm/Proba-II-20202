@@ -71,11 +71,12 @@ for(j in 1:length(claves$ABREVIATURA)){
                 )
             plot(p1)
             dev.off()
-            png(paste0("gifs/acum/", claves$ABREVIATURA[j], sprintf("/%06d.png", k)), width = 600, height = 450, res = 150)
+            png(paste0("gifs/acum/", claves$ABREVIATURA[j], sprintf("/%06d.png", k)), width = 600, height = 450, res = 100)
             p2 <- datos_loop %>%
                 filter(FECHA_ACTUALIZACION == fechas[i]) %>%
                 ggplot(aes(x = FECHA_INGRESO, y = acum)) +
                 geom_line(col = "darkorchid") +
+                geom_point(col = "darkorchid", size = 0.5) +
                 theme_minimal() +
                 scale_x_date(labels = scales::date_format("%d-%m"), limits = range(datos_loop$FECHA_INGRESO), breaks = breaks_pretty(n = 5)) +
                 scale_y_continuous(breaks= pretty_breaks(), limits = c(0, max(datos_loop$acum))) +
